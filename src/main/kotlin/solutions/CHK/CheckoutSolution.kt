@@ -7,16 +7,41 @@ object CheckoutSolution {
         'C' to 20,
         'D' to 15,
         'E' to 40,
-        'F' to 10
-    )
+        'F' to 10,
+        'G' to 20,
+        'H' to 10,
+        'I' to 35,
+        'J' to 60,
+        'K' to 80,
+        'L' to 90,
+        'M' to 15,
+        'N' to 40,
+        'O' to 10,
+        'P' to 50,
+        'Q' to 30,
+        'R' to 50,
+        'S' to 30,
+        'T' to 20,
+        'U' to 40,
+        'V' to 50,
+        'W' to 20,
+        'X' to 90,
+        'Y' to 10,
+        'Z' to 50
+        )
 
     private val offers = mapOf(
         'A' to listOf(Pair(3, 130), Pair(5, 200)),
         'B' to listOf(Pair(2, 45)),
+        'H' to listOf(Offer(10, 80), Offer(5, 45)),
+        'K' to listOf(Offer(2, 150)),
     )
 
-    private val bonusOffers = mapOf(
-        'E' to Pair('B', 1)
+    data class Offer(
+        val quantity: Int,
+        val price: Int = 0,
+        val bonusItem: Char = '\u0000',
+        val bonusQuantity: Int = 0
     )
 
     fun checkout(skus: String): Int {
@@ -70,3 +95,4 @@ object CheckoutSolution {
         }
     }
 }
+
