@@ -65,10 +65,10 @@ object CheckoutSolution {
 
     private fun applyOffers(itemCounts: MutableMap<Char, Int>) {
         offers.forEach { (item, offerList) ->
-            offerList.forEach { offer ->
+            offerList.sortedByDescending {it.quantity}. forEach { offer ->
                 val count = itemCounts[item] ?: 0
 
-                if (offer.bonusItem != '\u0000' && offer.price == 0) {
+                if (offer.bonusItem != '\u0000') {
                     val bonusApplies = count / offer.quantity
                     itemCounts[offer.bonusItem]?.let {
                         itemCounts[offer.bonusItem] = it - bonusApplies * offer.bonusQuantity
