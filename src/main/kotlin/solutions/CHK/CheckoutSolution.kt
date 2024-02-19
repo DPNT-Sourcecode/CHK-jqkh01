@@ -113,5 +113,3 @@ object CheckoutSolution {
         return itemOfferPrices
     }
 }
-
-
