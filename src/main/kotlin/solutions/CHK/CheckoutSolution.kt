@@ -33,6 +33,8 @@ object CheckoutSolution {
     private val offers = mapOf(
         'A' to listOf(Offer(3, 130), Offer(5, 200)),
         'B' to listOf(Offer(2, 45)),
+        'E' to listOf(Offer(2, 80, 'B')),
+        'F' to listOf(Offer(3,20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
         'N' to listOf(Offer(3, 120, 'M', 1)),
@@ -41,7 +43,7 @@ object CheckoutSolution {
         'R' to listOf(Offer(3, 150, 'Q', 1)),
         'U' to listOf(Offer(4, 120, 'U', 1)),
         'V' to listOf(Offer(3, 130), Offer(2, 90)),
-        'F' to listOf(Offer(3,20))
+
     )
 
     data class Offer(
@@ -79,9 +81,12 @@ object CheckoutSolution {
 
                 } else {
                     val applicableTimes = count / offer.quantity
-                    itemCounts[item] = count - (applicableTimes * offer.quantity)
+                    if (applicableTimes > 0) {
+                        count -= applicableTimes * offer.quantity
+                    }
                 }
             }
+            itemCounts[item] = count
         }
     }
 }
