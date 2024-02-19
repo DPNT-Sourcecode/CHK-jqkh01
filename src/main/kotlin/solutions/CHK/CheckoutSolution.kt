@@ -31,8 +31,8 @@ object CheckoutSolution {
         )
 
     private val offers = mapOf(
-        'A' to listOf(Pair(3, 130), Pair(5, 200)),
-        'B' to listOf(Pair(2, 45)),
+        'A' to listOf(Offer(3, 130), Offer(5, 200)),
+        'B' to listOf(Offer(2, 45)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
         'N' to listOf(Offer(3, 0, 'M', 1)),
@@ -40,6 +40,7 @@ object CheckoutSolution {
         'Q' to listOf(Offer(3, 80)),
         'R' to listOf(Offer(3, 0, 'Q', 1)),
         'U' to listOf(Offer(3, 0, 'U', 1)),
+        'V' to listOf(Offer(3, 130), Offer(2, 90))
     )
 
     data class Offer(
@@ -54,49 +55,32 @@ object CheckoutSolution {
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
-        applySpecialOfferForF(itemCounts)
+        applyOffers(itemCounts)
 
-        applyBonusOffers(itemCounts)
-
-        val totalPrice = itemCounts.entries.sumOf {(item, count) ->
-            applyOffers(item, count)
+        return itemCounts.entries.sumOf { (item, count) ->
+            count * prices.getValue(item)
         }
-
-
-        return totalPrice
     }
 
-    private fun applyOffers(item: Char, count: Int): Int {
-        offers[item]?.let { itemOffers ->
-            var total = 0
-            var remainingCount = count
-            for ((quantity, price) in itemOffers.sortedByDescending { it.first }) {
-                val applicableTimes = remainingCount / quantity
-                total += applicableTimes * price
-                remainingCount -= applicableTimes * quantity
-            }
-            return total + remainingCount * prices.getValue(item)
-        }
-        return prices.getValue(item) * count
-    }
-
-    private fun applyBonusOffers(itemCounts: MutableMap<Char, Int>) {
-        bonusOffers.forEach {(key, value) ->
-            val (bonusItem, freeCount) = value
-            val requiredForBonus = 2
-            itemCounts[key]?.let {
-                val bonusTimes = it / requiredForBonus
-                if (itemCounts.containsKey(bonusItem)) {
-                    itemCounts[bonusItem] = maxOf(0, itemCounts[bonusItem]!! - bonusTimes)
+    private fun applyOffers(itemCounts: MutableMap<Char, Int>) {
+        offers.forEach{(item, offerList) ->
+            offerList.forEach { offer ->
+                itemCounts[item]?.let { count ->
+                    if(offer.bonusItem != '\u0000' && offer.price == 0) {
+                        val bonusApplies = count / offer.quantity
+                        itemCounts.merge(offer.bonusItem, bonusApplies * offer.bonusQuantity) { oldValue, value ->
+                            maxOf(0, oldValue - value)
+                        }
+                    } else {
+                        val applicableTimes = count / offer.quantity
+                        itemCounts[item] = count - applicableTimes * offer.quantity
+                        val discount = applicableTimes * offer.price
+                        itemCounts.merge(item, discount / prices.getValue(item)) { oldValue, _ ->
+                            oldValue + applicableTimes * offer.quantity
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    private fun applySpecialOfferForF(itemCounts: MutableMap<Char, Int>) {
-        itemCounts['F']?.let {count ->
-            val freeFs = count / 3
-            itemCounts['F'] = count - freeFs
         }
     }
 }
