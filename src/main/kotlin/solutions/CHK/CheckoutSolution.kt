@@ -25,19 +25,29 @@ object CheckoutSolution {
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
         val totalPrice = itemCounts.entries.sumOf {(item, count) ->
-            val (offerQuantity, offerPrice) = offers[item] ?: Pair(0, 0)
-
-            if (offerQuantity > 0) {
-                val offerCount = count / offerQuantity
-                val normalCount = count % offerQuantity
-                (offerCount * offerPrice) + (normalCount * (prices[item] ?: 0))
-            } else {
-                count *(prices[item] ?:0)
-            }
+            applyOffers(item, count)
         }
 
         return totalPrice
     }
 
-    private fun calculatePriceForItem(item: Char, count: Int): Int
+    private fun applyOffers(item: Char, count: Int): Int {
+        offers[item]?.let { itemOffers ->
+            var total = 0
+            var remainingCount = count
+            for ((quantity, price) in itemOffers.sortedByDescending { it.first }) {
+                val applicableTimes = remainingCount / quantity
+                total += applicableTimes * price
+                remainingCount -= applicableTimes * quantity
+            }
+            return total + remainingCount * prices.getValue(item)
+        }
+        return prices.getValue(item) * count
+    }
+
+    private fun applyBonusOffers(itemCounts: MutableMap<Char, Int>) {
+        bonusOffers.forEach {(key, value) ->
+            val (bonus)
+        }
+    }
 }
