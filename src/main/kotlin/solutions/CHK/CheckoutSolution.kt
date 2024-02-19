@@ -16,6 +16,20 @@ object CheckoutSolution {
     fun checkout(skus: String): Int {
         if (!skus.all { it in prices.keys }) return -1
 
-        val itemCounts
+        val itemCounts = skus.groupingBy { it } .eachCount()
+
+        val totalPrice = itemCounts.entries.sumOf {(item, count) ->
+            val (offerQuantity, offerPrice) = offers[item] ?: Pair(0, 0)
+
+            if (offerQuantity > 0) {
+                val offerCount = count / offerQuantity
+                val normalCount = count % offerQuantity
+                (offerCount * offerPrice) + (normalCount * (prices[item] ?: 0))
+            } else {
+                count *(prices[item] ?:0)
+            }
+        }
+
+        return totalPrice
     }
 }
