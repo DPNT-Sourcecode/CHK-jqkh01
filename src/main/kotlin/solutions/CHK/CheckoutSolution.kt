@@ -25,7 +25,7 @@ object CheckoutSolution {
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
         applySpecialOfferForF(itemCounts)
-        
+
         applyBonusOffers(itemCounts)
 
         val totalPrice = itemCounts.entries.sumOf {(item, count) ->
@@ -63,10 +63,10 @@ object CheckoutSolution {
         }
     }
 
-    private fun discountForBonusItems(itemCounts: Map<Char, Int>): Int =
-        itemCounts.entries.sumOf { (item, count) ->
-            if (item in bonusOffers.values.map {it.first}) {
-                count * prices.getValue(item)
-            } else 0
+    private fun applySpecialOfferForF(itemCounts: MutableMap<Char, Int>) {
+        itemCounts['F']?.let {count ->
+            val freeFs = count / 3
+            itemCounts['F'] = count - freeFs
         }
+    }
 }
