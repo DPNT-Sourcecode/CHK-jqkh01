@@ -70,17 +70,14 @@ object CheckoutSolution {
 
                 if (offer.bonusItem != '\u0000') {
                     val bonusApplies = count / offer.quantity
-                    itemCounts[offer.bonusItem]?.let {
-                        itemCounts[offer.bonusItem] = it - bonusApplies * offer.bonusQuantity
-                    }
-                } else if (offer.price > 0) {
+                    itemCounts[offer.bonusItem] = itemCounts.getOrDefault(offer.bonusItem, 0) - (bonusApplies * offer.bonusQuantity)
+                    if (itemCounts[offer.bonusItem]!! < 0) itemCounts[offer.bonusItem] = 0
+                } else {
                     val applicableTimes = count / offer.quantity
-                    val totalDiscountPrice = applicableTimes * offer.price
-                    val itemsNotInOffer = count % offer.quantity
-                    val totalPriceForItemsNotInOffer = itemsNotInOffer * prices[item]!!
-                    itemCounts[item] = (totalDiscountPrice + totalPriceForItemsNotInOffer) / prices[item]!!
+                    itemCounts[item] = count - (applicableTimes * offer.quantity)
                 }
             }
         }
     }
 }
+
