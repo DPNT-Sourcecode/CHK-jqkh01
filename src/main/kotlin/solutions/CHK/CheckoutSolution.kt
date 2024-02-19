@@ -78,25 +78,32 @@ object CheckoutSolution {
 
         applySpecialOffers(itemCounts, itemOfferPrices)
 
+        applyRegularOffers(itemCounts, itemOfferPrices)
+
+        return itemOfferPrices
+    }
+
+    private fun applyRegularOffers(
+        itemCounts: MutableMap<Char, Int>,
+        itemOfferPrices: MutableMap<Char, Int>
+    ) {
         offers.forEach { (item, offerList) ->
             var count = itemCounts[item] ?: 0
 
-            offerList.sortedByDescending {it.quantity}. forEach { offer ->
+            offerList.sortedByDescending { it.quantity }.forEach { offer ->
 
                 if (offer.bonusItem != '\u0000') {
 
                 } else {
                     val applicableTimes = count / offer.quantity
                     if (applicableTimes > 0) {
-                        itemOfferPrices[item] = itemOfferPrices[item]!! +applicableTimes * offer.price
-                        itemCounts[item] =itemCounts[item]!! -applicableTimes * offer.quantity
+                        itemOfferPrices[item] = itemOfferPrices[item]!! + applicableTimes * offer.price
+                        itemCounts[item] = itemCounts[item]!! - applicableTimes * offer.quantity
                         count = itemCounts[item]!!
                     }
                 }
             }
         }
-
-        return itemOfferPrices
     }
 
     private fun applySpecialOffers(
