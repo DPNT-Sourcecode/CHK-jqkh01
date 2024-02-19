@@ -150,6 +150,3 @@ object CheckoutSolution {
         }
     }
 }
-
-
-
