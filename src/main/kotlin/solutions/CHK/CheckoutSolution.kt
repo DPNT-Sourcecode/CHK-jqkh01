@@ -76,7 +76,7 @@ object CheckoutSolution {
 
                 if (offer.bonusItem != '\u0000') {
                     val bonusApplies = count / offer.quantity
-                    if (bonusApplies > 0 && itemCounts.get(offer.bonusItem) != 0) {
+                    if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
                         itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
                         itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - 1
                         itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
@@ -96,3 +96,4 @@ object CheckoutSolution {
         return itemOfferPrices
     }
 }
+
