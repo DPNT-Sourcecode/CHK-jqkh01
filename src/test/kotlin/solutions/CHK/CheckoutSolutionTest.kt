@@ -22,4 +22,13 @@ class CheckoutSolutionTest {
         assertEquals(130, checkout("AAA"))
     }
 
+    @Test
+    fun testSpecialOfferWithMultipleItems() {
+        assertEquals(175, checkout("AAABB"))
+    }
+
+    @Test
+    fun illegalInput() {
+        assertEquals(-1, checkout("E"))
+    }
 }
