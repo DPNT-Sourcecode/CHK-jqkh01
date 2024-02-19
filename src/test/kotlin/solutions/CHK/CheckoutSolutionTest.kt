@@ -45,6 +45,13 @@ class CheckoutSolutionTest {
         assertEquals(30, checkout("FFFF"))
         assertEquals(10, checkout("F"))
         assertEquals(20, checkout("FF"))
-        assertEquals(200, checkout("UUUUUUUU"))
+
+    }
+
+    @Test
+    fun testWithU() {
+        assertEquals(120, checkout("UUUU"))
+        assertEquals(160, checkout("UUUUU"))
+        assertEquals(240, checkout("UUUUUUUU"))
     }
 }
