@@ -37,7 +37,7 @@ object CheckoutSolution {
         'F' to listOf(Offer(3,20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
-        'N' to listOf(),
+        'N' to listOf(Offer(3, 120, 'M', 1)),
         'P' to listOf(Offer(5, 200)),
         'Q' to listOf(Offer(3, 80)),
         'R' to listOf(Offer(3, 150, 'Q', 1)),
@@ -86,7 +86,7 @@ object CheckoutSolution {
                 val bonusApplies = count / offer.quantity
                 if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
                     itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
-                    itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - 1
+                    itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - bonusApplies * offer.bonusQuantity
                     itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
                 }
             }
@@ -113,3 +113,4 @@ object CheckoutSolution {
         return itemOfferPrices
     }
 }
+
