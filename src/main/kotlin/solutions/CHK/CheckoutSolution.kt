@@ -88,6 +88,7 @@ object CheckoutSolution {
 
         for (c in skus) {
             if (c in itemsInGroupOffer) {
+                temp.add(c)
                 if (temp.size == 3) {
                     cost += 45
                     temp.clear()
@@ -96,8 +97,6 @@ object CheckoutSolution {
                 if (itemCounts[c] != 0) {
                     itemCounts[c] = 0
                 }
-
-                temp.add(c)
             }
         }
 
@@ -151,5 +150,6 @@ object CheckoutSolution {
         }
     }
 }
+
 
 
