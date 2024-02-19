@@ -54,4 +54,11 @@ class CheckoutSolutionTest {
         assertEquals(160, checkout("UUUUU"))
         assertEquals(240, checkout("UUUUUUUU"))
     }
+
+    @Test
+    fun testWithEB() {
+        assertEquals(160, checkout("EEEEBB"))
+        assertEquals(160, checkout("BEBEEE"))
+        assertEquals(300, checkout("RRRRRRQQ"))
+    }
 }
