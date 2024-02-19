@@ -89,15 +89,28 @@ object CheckoutSolution {
         itemCounts: MutableMap<Char, Int>,
         itemOfferPrices: MutableMap<Char, Int>
     ) {
-        val l: List<Char> = listOf()
+        val l: ArrayList<Char> = ArrayList()
 
         itemCounts.forEach {(item, count) ->
             if (item in itemsInGroupOffer) {
                 for (i in 0..count) {
-                    f
+                    l.add(item)
                 }
             }
         }
+
+        val length = l.size
+        val applies = length / 3
+
+        if (applies > 0) {
+            for (i in 0..applies * 3) {
+                itemCounts[l[i]] = itemCounts[l[i]]!! - 1
+            }
+
+            itemOfferPrices
+        }
+        l.slice(applies * 3 until length)
+
 
     }
 
@@ -148,4 +161,5 @@ object CheckoutSolution {
         }
     }
 }
+
 
