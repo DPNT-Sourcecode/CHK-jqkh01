@@ -52,8 +52,8 @@ object CheckoutSolution {
             val requiredForBonus = 2
             itemCounts[key]?.let {
                 val bonusTimes = it / requiredForBonus
-                itemCounts.merge(bonusItem, bonusTimes * freeCount) {oldValue, bonusValue ->
-                    maxOf(0, oldValue - bonusValue)
+                if (itemCounts.containsKey(bonusItem)) {
+                    itemCounts[bonusItem] = maxOf(0, itemCounts[bonusItem]!! - bonusApplies)
                 }
             }
         }
@@ -66,4 +66,3 @@ object CheckoutSolution {
             } else 0
         }
 }
-
