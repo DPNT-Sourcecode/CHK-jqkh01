@@ -1,7 +1,9 @@
 package solutions.CHK
 
 object CheckoutSolution {
+    private val prices = mapOf
+
     fun checkout(skus: String): Int {
-        TODO("Solution not implemented")
+        if (!items.all)
     }
 }
