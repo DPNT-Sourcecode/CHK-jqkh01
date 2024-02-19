@@ -59,10 +59,11 @@ object CheckoutSolution {
         }
     }
 
-    private fun discountForBonusItems(itemCounts: MutableMap<Char, Int>): Int =
+    private fun discountForBonusItems(itemCounts: Map<Char, Int>): Int =
         itemCounts.entries.sumOf { (item, count) ->
             if (item in bonusOffers.values.map {it.first}) {
                 count * prices.getValue(item)
             } else 0
         }
 }
+
