@@ -12,7 +12,6 @@ object CheckoutSolution {
     private val offers = mapOf(
         'A' to listOf(Pair(3, 130), Pair(5, 200)),
         'B' to listOf(Pair(2, 45)),
-        'E' to listOf(Pair(2, 80))
     )
 
     private val bonusOffers = mapOf(

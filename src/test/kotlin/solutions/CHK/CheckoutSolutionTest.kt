@@ -32,4 +32,11 @@ class CheckoutSolutionTest {
         assertEquals(-1, checkout("E"))
         assertEquals(-1, checkout("AAABBE"))
     }
+
+    @Test
+    fun testUpdatedAOffersAndE () {
+        assertEquals(200, checkout("AAAAA") )
+        assertEquals(40, checkout("E"))
+        assertEquals(80, checkout("EEB"))
+    }
 }
