@@ -35,12 +35,13 @@ object CheckoutSolution {
         'B' to listOf(Offer(2, 45)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
-        'N' to listOf(Offer(3, 0, 'M', 1)),
+        'N' to listOf(Offer(3, 120, 'M', 1)),
         'P' to listOf(Offer(5, 200)),
         'Q' to listOf(Offer(3, 80)),
-        'R' to listOf(Offer(3, 0, 'Q', 1)),
-        'U' to listOf(Offer(3, 0, 'U', 1)),
-        'V' to listOf(Offer(3, 130), Offer(2, 90))
+        'R' to listOf(Offer(3, 150, 'Q', 1)),
+        'U' to listOf(Offer(4, 120, 'U', 1)),
+        'V' to listOf(Offer(3, 130), Offer(2, 90)),
+        'F' to listOf(Offer(3,20))
     )
 
     data class Offer(
