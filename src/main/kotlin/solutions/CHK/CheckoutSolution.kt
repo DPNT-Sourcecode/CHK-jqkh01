@@ -57,12 +57,10 @@ object CheckoutSolution {
         val bonusQuantity: Int = 0
     )
 
-    val itemsInGroupOffer = listOf('S', 'T', 'X', 'Y', 'Z')
+    private val itemsInGroupOffer = listOf('S', 'T', 'X', 'Y', 'Z')
 
     fun checkout(skus: String): Int {
         if (skus.any { it !in prices }) return -1
-
-
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
@@ -125,9 +123,7 @@ object CheckoutSolution {
 
             offerList.sortedByDescending { it.quantity }.forEach { offer ->
 
-                if (offer.bonusItem != '\u0000') {
-
-                } else {
+                if (offer.bonusItem == '\u0000') {
                     val applicableTimes = count / offer.quantity
                     if (applicableTimes > 0) {
                         itemOfferPrices[item] = itemOfferPrices[item]!! + applicableTimes * offer.price
@@ -150,7 +146,7 @@ object CheckoutSolution {
         }
 
         specialOffers.forEach { (item, offerList) ->
-            var count = itemCounts[item] ?: 0
+            val count = itemCounts[item] ?: 0
 
             offerList.sortedByDescending { it.quantity }.forEach { offer ->
                 val bonusApplies = count / offer.quantity
