@@ -76,11 +76,29 @@ object CheckoutSolution {
     private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
         val itemOfferPrices: MutableMap<Char, Int> = itemCounts.mapValues { 0 }.toMutableMap()
 
+        applyGroupOffers(itemCounts, itemOfferPrices)
+
         applySpecialOffers(itemCounts, itemOfferPrices)
 
         applyRegularOffers(itemCounts, itemOfferPrices)
 
         return itemOfferPrices
+    }
+
+    private fun applyGroupOffers(
+        itemCounts: MutableMap<Char, Int>,
+        itemOfferPrices: MutableMap<Char, Int>
+    ) {
+        val l: List<Char> = listOf()
+
+        itemCounts.forEach {(item, count) ->
+            if (item in itemsInGroupOffer) {
+                for (i in 0..count) {
+                    f
+                }
+            }
+        }
+
     }
 
     private fun applyRegularOffers(
@@ -130,3 +148,4 @@ object CheckoutSolution {
         }
     }
 }
+
