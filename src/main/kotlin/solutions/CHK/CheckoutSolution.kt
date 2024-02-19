@@ -98,7 +98,7 @@ object CheckoutSolution {
                     temp.clear()
                 }
             }
-                
+
             if (itemCounts[item] != 0) {
                 itemCounts[item] = 0
             }
@@ -154,3 +154,4 @@ object CheckoutSolution {
         }
     }
 }
+
