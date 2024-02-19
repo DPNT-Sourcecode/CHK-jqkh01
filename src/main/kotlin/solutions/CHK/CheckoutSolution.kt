@@ -28,13 +28,13 @@ object CheckoutSolution {
         'X' to 17,
         'Y' to 20,
         'Z' to 21
-        )
+    )
 
     private val offers = mapOf(
         'A' to listOf(Offer(3, 130), Offer(5, 200)),
         'B' to listOf(Offer(2, 45)),
         'E' to listOf(Offer(2, 80, 'B', 1)),
-        'F' to listOf(Offer(3,20)),
+        'F' to listOf(Offer(3, 20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 120)),
         'N' to listOf(Offer(3, 120, 'M', 1)),
@@ -43,12 +43,7 @@ object CheckoutSolution {
         'R' to listOf(Offer(3, 150, 'Q', 1)),
         'U' to listOf(Offer(4, 120)),
         'V' to listOf(Offer(3, 130), Offer(2, 90)),
-
-    )
-
-    private val specialOffers = listOf(
-        Offer(3, 120, 'M', 1),
-    )
+        )
 
     data class Offer(
         val quantity: Int,
@@ -62,9 +57,9 @@ object CheckoutSolution {
     fun checkout(skus: String): Int {
         if (skus.any { it !in prices }) return -1
 
-        val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
+        val itemCounts = skus.groupingBy { it }.eachCount().toMutableMap()
 
-        val groupOfferCost= applyGroupOffers(itemCounts, skus)
+        val groupOfferCost = applyGroupOffers(itemCounts, skus)
 
         val itemOfferPrices = applyOffers(itemCounts)
 
@@ -72,7 +67,6 @@ object CheckoutSolution {
             count * prices.getValue(item) + itemOfferPrices.getValue(item)
         }
     }
-
 
 
     private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
@@ -139,10 +133,8 @@ object CheckoutSolution {
         itemCounts: MutableMap<Char, Int>,
         itemOfferPrices: MutableMap<Char, Int>
     ) {
-        val specialOffers = offers.mapValues { (item, offerList) ->
-            offerList.filter { it ->
-                it.bonusItem != '\u0000'
-            }
+        val specialOffers = offers.mapValues { (_, offerList) ->
+            offerList.filter { it.bonusItem != '\u0000' }
         }
 
         specialOffers.forEach { (item, offerList) ->
@@ -159,3 +151,4 @@ object CheckoutSolution {
         }
     }
 }
+
