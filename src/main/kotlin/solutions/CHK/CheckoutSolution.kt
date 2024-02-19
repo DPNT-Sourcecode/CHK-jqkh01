@@ -47,7 +47,21 @@ object CheckoutSolution {
 
     private fun applyBonusOffers(itemCounts: MutableMap<Char, Int>) {
         bonusOffers.forEach {(key, value) ->
-            val (bonus)
+            val (bonusItem, freeCount) = value
+            val requiredForBonus = 2
+            itemCounts[key]?.let {
+                val bonusTimes = it / requiredForBonus
+                itemCounts.merge(bonusItem, bonusTimes * freeCount) {oldValue, bonusValue ->
+                    maxOf(0, oldValue - bonusValue)
+                }
+            }
         }
     }
+
+    private fun discountForBonusItems(itemCounts: MutableMap<Char, Int>): Int =
+        itemCounts.entries.sumOf { (item, count) ->
+            if (item in bonusOffers.values.map {it.first}) {
+                count * prices.getValue(item)
+            } else 0
+        }
 }
