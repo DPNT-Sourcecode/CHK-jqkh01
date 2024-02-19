@@ -36,7 +36,7 @@ object CheckoutSolution {
         'E' to listOf(Offer(2, 80, 'B', 1)),
         'F' to listOf(Offer(3,20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
-        'K' to listOf(Offer(2, 150)),
+        'K' to listOf(Offer(2, 120)),
         'N' to listOf(Offer(3, 120, 'M', 1)),
         'P' to listOf(Offer(5, 200)),
         'Q' to listOf(Offer(3, 80)),
@@ -57,11 +57,12 @@ object CheckoutSolution {
         val bonusQuantity: Int = 0
     )
 
+    val itemsInGroupOffer = listOf('S', 'T', 'X', 'Y', 'Z')
+
     fun checkout(skus: String): Int {
         if (skus.any { it !in prices }) return -1
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
-
 
         val itemOfferPrices = applyOffers(itemCounts)
 
@@ -70,27 +71,12 @@ object CheckoutSolution {
         }
     }
 
+
+
     private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
         val itemOfferPrices: MutableMap<Char, Int> = itemCounts.mapValues { 0 }.toMutableMap()
 
-        val specialOffers = offers.mapValues {(item, offerList) ->
-            offerList.filter {
-                it -> it.bonusItem != '\u0000'
-            }
-        }
-
-        specialOffers.forEach { (item, offerList) ->
-            var count = itemCounts[item] ?: 0
-
-            offerList.sortedByDescending { it.quantity }.forEach {offer ->
-                val bonusApplies = count / offer.quantity
-                if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
-                    itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
-                    itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - bonusApplies * offer.bonusQuantity
-                    itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
-                }
-            }
-        }
+        applySpecialOffers(itemCounts, itemOfferPrices)
 
         offers.forEach { (item, offerList) ->
             var count = itemCounts[item] ?: 0
@@ -111,5 +97,29 @@ object CheckoutSolution {
         }
 
         return itemOfferPrices
+    }
+
+    private fun applySpecialOffers(
+        itemCounts: MutableMap<Char, Int>,
+        itemOfferPrices: MutableMap<Char, Int>
+    ) {
+        val specialOffers = offers.mapValues { (item, offerList) ->
+            offerList.filter { it ->
+                it.bonusItem != '\u0000'
+            }
+        }
+
+        specialOffers.forEach { (item, offerList) ->
+            var count = itemCounts[item] ?: 0
+
+            offerList.sortedByDescending { it.quantity }.forEach { offer ->
+                val bonusApplies = count / offer.quantity
+                if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
+                    itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
+                    itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - bonusApplies * offer.bonusQuantity
+                    itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
+                }
+            }
+        }
     }
 }
