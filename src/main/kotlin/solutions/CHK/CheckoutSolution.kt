@@ -63,24 +63,25 @@ object CheckoutSolution {
     }
 
     private fun applyOffers(itemCounts: MutableMap<Char, Int>) {
-        offers.forEach{(item, offerList) ->
+        offers.forEach { (item, offerList) ->
             offerList.forEach { offer ->
-                itemCounts[item]?.let { count ->
-                    if(offer.bonusItem != '\u0000' && offer.price == 0) {
-                        val bonusApplies = count / offer.quantity
-                        itemCounts.merge(offer.bonusItem, bonusApplies * offer.bonusQuantity) { oldValue, value ->
-                            maxOf(0, oldValue - value)
-                        }
-                    } else {
-                        val applicableTimes = count / offer.quantity
-                        itemCounts[item] = count - applicableTimes * offer.quantity
-                        val discount = applicableTimes * offer.price
-                        itemCounts.merge(item, discount / prices.getValue(item)) { oldValue, _ ->
-                            oldValue + applicableTimes * offer.quantity
-                        }
+                val count = itemCounts[item] ?: 0
+
+                if (offer.bonusItem != '\u0000' && offer.price == 0) {
+                    val bonusApplies = count / offer.quantity
+                    itemCounts[offer.bonusItem]?.let {
+                        itemCounts[offer.bonusItem] = it - bonusApplies * offer.bonusQuantity
                     }
+                } else if (offer.price > 0) {
+                    val applicableTimes = count / offer.quantity
+                    val totalDiscountPrice = applicableTimes * offer.price
+                    val itemsNotInOffer = count % offer.quantity
+                    val totalPriceForItemsNotInOffer = itemsNotInOffer * prices[item]!!
+                    itemCounts[item] = (totalDiscountPrice + totalPriceForItemsNotInOffer) / prices[item]!!
                 }
             }
+
+        }
         }
     }
 }
