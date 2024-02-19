@@ -80,8 +80,6 @@ object CheckoutSolution {
                     itemCounts[item] = (totalDiscountPrice + totalPriceForItemsNotInOffer) / prices[item]!!
                 }
             }
-
-        }
         }
     }
 }
