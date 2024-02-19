@@ -91,7 +91,7 @@ object CheckoutSolution {
             .sortedByDescending { (item, _) -> prices[item] }
 
         for ((item, count) in sortedItemInGroupOffer) {
-            for (i in 0..count) {
+            for (i in 0..count-1) {
                 temp.add(item)
                 if (temp.size == 3) {
                     cost += 45
@@ -154,4 +154,5 @@ object CheckoutSolution {
         }
     }
 }
+
 
