@@ -67,5 +67,3 @@ object CheckoutSolution {
             } else 0
         }
 }
-
-
