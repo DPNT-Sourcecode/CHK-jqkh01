@@ -45,6 +45,6 @@ class CheckoutSolutionTest {
         assertEquals(30, checkout("FFFF"))
         assertEquals(10, checkout("F"))
         assertEquals(20, checkout("FF"))
-        assertEquals(40, checkout("FFFFFF"))
+        assertEquals(200, checkout("UUUUUUUU"))
     }
 }
