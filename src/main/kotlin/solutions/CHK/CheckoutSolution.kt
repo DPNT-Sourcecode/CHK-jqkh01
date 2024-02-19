@@ -66,11 +66,11 @@ object CheckoutSolution {
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
-        val groupOfferPrice = applyGroupOffers(itemCounts, skus)
+        val groupOfferCost= applyGroupOffers(itemCounts, skus)
 
         val itemOfferPrices = applyOffers(itemCounts)
 
-        return itemCounts.entries.sumOf { (item, count) ->
+        return groupOfferCost + itemCounts.entries.sumOf { (item, count) ->
             count * prices.getValue(item) + itemOfferPrices.getValue(item)
         }
     }
@@ -79,8 +79,6 @@ object CheckoutSolution {
 
     private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
         val itemOfferPrices: MutableMap<Char, Int> = itemCounts.mapValues { 0 }.toMutableMap()
-
-        applyGroupOffers(itemCounts, itemOfferPrices)
 
         applySpecialOffers(itemCounts, itemOfferPrices)
 
@@ -92,30 +90,30 @@ object CheckoutSolution {
     private fun applyGroupOffers(
         itemCounts: MutableMap<Char, Int>,
         skus: String
-    ) {
-        val l: ArrayList<Char> = ArrayList()
+    ): Int {
+        val temp: ArrayList<Char> = ArrayList()
+        var cost = 0
 
-        itemCounts.forEach {(item, count) ->
-            if (item in itemsInGroupOffer) {
-                for (i in 0..count) {
-                    l.add(item)
+        for (c in skus) {
+            if (c in itemsInGroupOffer) {
+                if (temp.size % 3 == 0) {
+                    cost += 45
+                    temp.clear()
                 }
+
+                if (itemCounts[c] != 0) {
+                    itemCounts[c] = 0
+                }
+
+                temp.add(c)
             }
         }
 
-        val length = l.size
-        val applies = length / 3
-
-        if (applies > 0) {
-            for (i in 0..applies * 3) {
-                itemCounts[l[i]] = itemCounts[l[i]]!! - 1
-            }
-
-            itemOfferPrices
+        for (c in temp) {
+            cost += prices[c]!!
         }
-        l.slice(applies * 3 until length)
 
-
+        return cost
     }
 
     private fun applyRegularOffers(

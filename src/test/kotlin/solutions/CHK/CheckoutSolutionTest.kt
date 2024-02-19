@@ -61,4 +61,9 @@ class CheckoutSolutionTest {
         assertEquals(160, checkout("BEBEEE"))
         assertEquals(300, checkout("RRRRRRQQ"))
     }
+
+    @Test
+    fun testGroupOffer(){
+        assertEquals(110, checkout("STSXYZS"))
+    }
 }
