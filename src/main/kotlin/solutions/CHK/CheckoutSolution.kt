@@ -65,13 +65,18 @@ object CheckoutSolution {
 
     private fun applyOffers(itemCounts: MutableMap<Char, Int>) {
         offers.forEach { (item, offerList) ->
+            var count = itemCounts[item] ?: 0
+
             offerList.sortedByDescending {it.quantity}. forEach { offer ->
-                var count = itemCounts[item] ?: 0
 
                 if (offer.bonusItem != '\u0000') {
                     val bonusApplies = count / offer.quantity
-                    itemCounts[offer.bonusItem] = itemCounts.getOrDefault(offer.bonusItem, 0) - (bonusApplies * offer.bonusQuantity)
-                    if (itemCounts[offer.bonusItem]!! < 0) itemCounts[offer.bonusItem] = 0
+                    if (bonusApplies > 0) {
+                        itemCounts.merge(offer.bonusItem, bonusApplies * offer.bonusQuantity) { oldValue, value ->
+                            maxOf(0, oldValue-value)
+                        }
+                    }
+
                 } else {
                     val applicableTimes = count / offer.quantity
                     itemCounts[item] = count - (applicableTimes * offer.quantity)
