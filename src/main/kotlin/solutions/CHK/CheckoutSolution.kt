@@ -33,7 +33,7 @@ object CheckoutSolution {
     private val offers = mapOf(
         'A' to listOf(Offer(3, 130), Offer(5, 200)),
         'B' to listOf(Offer(2, 45)),
-        'E' to listOf(Offer(2, 80, 'B')),
+        'E' to listOf(Offer(2, 80, 'B', 1)),
         'F' to listOf(Offer(3,20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
@@ -113,4 +113,5 @@ object CheckoutSolution {
         return itemOfferPrices
     }
 }
+
 
