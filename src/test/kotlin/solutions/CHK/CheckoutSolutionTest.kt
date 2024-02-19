@@ -29,8 +29,8 @@ class CheckoutSolutionTest {
 
     @Test
     fun illegalInput() {
-        assertEquals(-1, checkout("Z"))
-        assertEquals(-1, checkout("AAABBX"))
+        assertEquals(-1, checkout("@"))
+        assertEquals(-1, checkout("AAABB@"))
     }
 
     @Test
