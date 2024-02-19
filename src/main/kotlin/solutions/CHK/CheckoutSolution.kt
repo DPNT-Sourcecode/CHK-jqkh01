@@ -59,7 +59,7 @@ object CheckoutSolution {
 
         val itemCounts = skus.groupingBy { it }.eachCount().toMutableMap()
 
-        val groupOfferCost = applyGroupOffers(itemCounts, skus)
+        val groupOfferCost = applyGroupOffers(itemCounts)
 
         val itemOfferPrices = applyOffers(itemCounts)
 
@@ -80,23 +80,27 @@ object CheckoutSolution {
     }
 
     private fun applyGroupOffers(
-        itemCounts: MutableMap<Char, Int>,
-        skus: String
+        itemCounts: MutableMap<Char, Int>
     ): Int {
         val temp: ArrayList<Char> = ArrayList()
         var cost = 0
 
-        for (c in skus) {
-            if (c in itemsInGroupOffer) {
-                temp.add(c)
+        val sortedItemInGroupOffer = itemCounts
+            .filterKeys { it in itemsInGroupOffer }
+            .toList()
+            .sortedByDescending { (item, _) -> prices[item] }
+
+        for ((item, count) in sortedItemInGroupOffer) {
+            for (i in 0..count) {
+                temp.add(item)
                 if (temp.size == 3) {
                     cost += 45
                     temp.clear()
                 }
-
-                if (itemCounts[c] != 0) {
-                    itemCounts[c] = 0
-                }
+            }
+                
+            if (itemCounts[item] != 0) {
+                itemCounts[item] = 0
             }
         }
 
