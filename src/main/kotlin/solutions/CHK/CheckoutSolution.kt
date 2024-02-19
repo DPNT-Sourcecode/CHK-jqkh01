@@ -58,6 +58,7 @@ object CheckoutSolution {
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
+
         applyOffers(itemCounts)
 
         return itemCounts.entries.sumOf { (item, count) ->
@@ -65,7 +66,7 @@ object CheckoutSolution {
         }
     }
 
-    private fun applyOffers(itemCounts: MutableMap<Char, Int>) {
+    private fun applyOffers(itemCounts: MutableMap<Char, Int>){
         offers.forEach { (item, offerList) ->
             var count = itemCounts[item] ?: 0
 
@@ -86,7 +87,6 @@ object CheckoutSolution {
                     }
                 }
             }
-            itemCounts[item] = count
         }
     }
 }
