@@ -9,6 +9,6 @@ class HelloSolutionTest {
 
     @Test
     fun testHello() {
-        assertEquals("Hello, World!", hello("Hoang"))
+        assertEquals("Hello, Hoang!", hello("Hoang"))
     }
 }
