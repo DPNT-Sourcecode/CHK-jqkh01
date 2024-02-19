@@ -23,11 +23,11 @@ object CheckoutSolution {
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
+        applyBonusOffers(itemCounts)
+
         val totalPrice = itemCounts.entries.sumOf {(item, count) ->
             applyOffers(item, count)
         }
-
-        applyBonusOffers(itemCounts)
 
         return totalPrice - discountForBonusItems(itemCounts)
     }
@@ -53,7 +53,7 @@ object CheckoutSolution {
             itemCounts[key]?.let {
                 val bonusTimes = it / requiredForBonus
                 if (itemCounts.containsKey(bonusItem)) {
-                    itemCounts[bonusItem] = maxOf(0, itemCounts[bonusItem]!! - bonusApplies)
+                    itemCounts[bonusItem] = maxOf(0, itemCounts[bonusItem]!! - bonusTimes)
                 }
             }
         }
