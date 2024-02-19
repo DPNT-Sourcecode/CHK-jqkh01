@@ -37,13 +37,17 @@ object CheckoutSolution {
         'F' to listOf(Offer(3,20)),
         'H' to listOf(Offer(10, 80), Offer(5, 45)),
         'K' to listOf(Offer(2, 150)),
-        'N' to listOf(Offer(3, 120, 'M', 1)),
+        'N' to listOf(),
         'P' to listOf(Offer(5, 200)),
         'Q' to listOf(Offer(3, 80)),
         'R' to listOf(Offer(3, 150, 'Q', 1)),
         'U' to listOf(Offer(4, 120)),
         'V' to listOf(Offer(3, 130), Offer(2, 90)),
 
+    )
+
+    private val specialOffers = listOf(
+        Offer(3, 120, 'M', 1),
     )
 
     data class Offer(
@@ -69,18 +73,31 @@ object CheckoutSolution {
     private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
         val itemOfferPrices: MutableMap<Char, Int> = itemCounts.mapValues { 0 }.toMutableMap()
 
+        val specialOffers = offers.mapValues {(item, offerList) ->
+            offerList.filter {
+                it -> it.bonusItem != '\u0000'
+            }
+        }
+
+        specialOffers.forEach { (item, offerList) ->
+            var count = itemCounts[item] ?: 0
+
+            offerList.sortedByDescending { it.quantity }.forEach {offer ->
+                val bonusApplies = count / offer.quantity
+                if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
+                    itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
+                    itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - 1
+                    itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
+                }
+            }
+        }
+
         offers.forEach { (item, offerList) ->
             var count = itemCounts[item] ?: 0
 
             offerList.sortedByDescending {it.quantity}. forEach { offer ->
 
                 if (offer.bonusItem != '\u0000') {
-                    val bonusApplies = count / offer.quantity
-                    if (bonusApplies > 0 && itemCounts[offer.bonusItem] != null) {
-                        itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
-                        itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - 1
-                        itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
-                    }
 
                 } else {
                     val applicableTimes = count / offer.quantity
