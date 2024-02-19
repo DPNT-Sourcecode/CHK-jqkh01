@@ -12,7 +12,7 @@ object CheckoutSolution {
         'H' to 10,
         'I' to 35,
         'J' to 60,
-        'K' to 80,
+        'K' to 70,
         'L' to 90,
         'M' to 15,
         'N' to 40,
@@ -151,4 +151,5 @@ object CheckoutSolution {
         }
     }
 }
+
 
