@@ -19,7 +19,7 @@ object CheckoutSolution {
     )
 
     fun checkout(skus: String): Int {
-        if (!skus.all { it in prices.keys }) return -1
+        if (skus.any { it !in prices }) return -1
 
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
@@ -67,4 +67,5 @@ object CheckoutSolution {
             } else 0
         }
 }
+
 
