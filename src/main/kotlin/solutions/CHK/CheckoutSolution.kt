@@ -29,7 +29,8 @@ object CheckoutSolution {
             applyOffers(item, count)
         }
 
-        return totalPrice - discountForBonusItems(itemCounts)
+
+        return totalPrice
     }
 
     private fun applyOffers(item: Char, count: Int): Int {
@@ -66,3 +67,4 @@ object CheckoutSolution {
             } else 0
         }
 }
+
