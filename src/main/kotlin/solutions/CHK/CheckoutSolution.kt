@@ -59,14 +59,16 @@ object CheckoutSolution {
         val itemCounts = skus.groupingBy { it } .eachCount().toMutableMap()
 
 
-        applyOffers(itemCounts)
+        val itemOfferPrices = applyOffers(itemCounts)
 
         return itemCounts.entries.sumOf { (item, count) ->
-            count * prices.getValue(item)
+            count * prices.getValue(item) + itemOfferPrices.getValue(item)
         }
     }
 
-    private fun applyOffers(itemCounts: MutableMap<Char, Int>){
+    private fun applyOffers(itemCounts: MutableMap<Char, Int>): MutableMap<Char, Int> {
+        val itemOfferPrices: MutableMap<Char, Int> = itemCounts.mapValues { 0 }.toMutableMap()
+
         offers.forEach { (item, offerList) ->
             var count = itemCounts[item] ?: 0
 
@@ -75,18 +77,22 @@ object CheckoutSolution {
                 if (offer.bonusItem != '\u0000') {
                     val bonusApplies = count / offer.quantity
                     if (bonusApplies > 0) {
-                        itemCounts.merge(offer.bonusItem, bonusApplies * offer.bonusQuantity) { oldValue, value ->
-                            maxOf(0, oldValue-value)
-                        }
+                        itemOfferPrices[item] = itemOfferPrices[item]!! + bonusApplies * offer.price
+                        itemCounts[offer.bonusItem] = itemCounts[offer.bonusItem]!! - 1
+                        itemCounts[item] = itemCounts[item]!! - bonusApplies * offer.quantity
                     }
 
                 } else {
                     val applicableTimes = count / offer.quantity
                     if (applicableTimes > 0) {
-                        count -= applicableTimes * offer.quantity
+                        itemOfferPrices[item] = itemOfferPrices[item]!! +applicableTimes * offer.price
+                        itemCounts[item] =itemCounts[item]!! -applicableTimes * offer.quantity
+                        count = itemCounts[item]!!
                     }
                 }
             }
         }
+
+        return itemOfferPrices
     }
 }
